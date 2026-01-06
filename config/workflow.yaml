@@ -1,0 +1,49 @@
+pimcore:
+    workflows:
+        product_workflow:
+          label: "Product Workflow"
+          type: "state_machine"
+          supports:
+            - Pimcore\Model\DataObject\Product
+          places:
+            draft:
+                label: 'Draft'
+                color: '#377ea9'
+            review:
+                label: 'Review'
+                color: '#28a013'
+            approved:
+                label: 'Approved'
+                title: 'Product approved'
+                color: '#d9ef36'
+        
+            rejected:
+                label: 'Rejected'
+                color: 'red'    
+          transitions:
+            to_review:
+                from: draft
+                to: review
+                options:
+                    label: 'Draft to Review'
+                guard: "is_granted('ROLE_PRODUCT_CREATOR') or is_fully_authenticated() and is_granted('ROLE_PIMCORE_ADMIN')"      
+            to_approve:
+                from: review
+                to: approved
+                options:
+                    label: "Review to Approved"
+                guard: "is_granted('ROLE_PRODUCT_APPROVER') or is_fully_authenticated() and is_granted('ROLE_PIMCORE_ADMIN')"
+            reject_from_review:
+                from: review
+                to: rejected
+                guard: "is_granted('ROLE_PRODUCT_REVIEWER') or is_granted('ROLE_PRODUCT_APPROVER')"
+                options:
+                    label: "Review to Rejected"
+
+            reject_from_approved:
+                from: approved
+                to: rejected
+                guard: "is_granted('ROLE_PRODUCT_APPROVER') or is_fully_authenticated() and is_granted('ROLE_PIMCORE_ADMIN')" 
+                options:
+                    label: "Approved to Rejected"    
+                         

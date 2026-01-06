@@ -1,0 +1,13 @@
+pimcore_data_hub:
+    configurations:
+        workflow:
+            general:
+                type: graphql
+                path: null
+                name: workflow
+                modificationDate: 1757677111
+                createDate: 1757677111
+            workspaces: {  }
+            permissions:
+                user: {  }
+                role: {  }
